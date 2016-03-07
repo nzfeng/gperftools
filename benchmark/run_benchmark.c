@@ -35,6 +35,7 @@
 struct internal_bench {
   bench_body body;
   uintptr_t param;
+  init_body init_fn;
 };
 
 static void run_body(struct internal_bench *b, long iterations)
@@ -68,32 +69,21 @@ static double measure_once(struct internal_bench *b, long iterations)
   return time;
 }
 
-#define TRIAL_NSEC 0.3E9
-#define TARGET_NSEC 3E9
-
 static double run_benchmark(struct internal_bench *b)
 {
-  long iterations = 128;
   double nsec;
-  while (1) {
-    nsec = measure_once(b, iterations);
-    if (nsec > TRIAL_NSEC) {
-      break;
-    }
-    iterations <<= 1;
-  }
-  while (nsec < TARGET_NSEC) {
-    iterations = (long)(iterations * TARGET_NSEC * 1.1 / nsec);
-    nsec = measure_once(b, iterations);
-  }
-  return nsec / iterations;
+  nsec = measure_once(b, ITERATIONS);
+  return nsec / ITERATIONS;
 }
 
-void report_benchmark(const char *name, bench_body body, uintptr_t param)
+void report_benchmark(const char *name, bench_body body, init_body init_fn, uintptr_t param)
 {
   int i;
-  struct internal_bench b = {.body = body, .param = param};
-  for (i = 0; i < 3; i++) {
+  struct internal_bench b = {.body = body, .param = param, .init_fn = init_fn};
+  for (i = 0; i < 12; i++) {
+    if (b.init_fn)
+        b.init_fn();
+
     double nsec = run_benchmark(&b);
     int slen;
     int padding_size;

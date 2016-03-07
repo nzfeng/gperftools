@@ -27,14 +27,22 @@
 #ifndef _RUN_BENCHMARK_H_
 #define _RUN_BENCHMARK_H_
 #include <stdint.h>
+#include <cstdlib>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef void (*bench_body)(long iterations, uintptr_t param);
+#ifndef NATIVE_FACTOR
+#define NATIVE_FACTOR 1
+#endif
 
-void report_benchmark(const char *name, bench_body body, uintptr_t param);
+const size_t ITERATIONS = 32768 * NATIVE_FACTOR;
+
+typedef void (*bench_body)(long iterations, uintptr_t param);
+typedef void (*init_body)();
+
+void report_benchmark(const char *name, bench_body body, init_body init_fn, uintptr_t param);
 
 #ifdef __cplusplus
 } // extern "C"

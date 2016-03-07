@@ -170,15 +170,17 @@ static void bench_fastpath_rnd_dependent(long iterations,
 
 int main(void)
 {
-  report_benchmark("bench_fastpath_throughput", bench_fastpath_throughput, 0);
-  report_benchmark("bench_fastpath_dependent", bench_fastpath_dependent, 0);
-  report_benchmark("bench_fastpath_simple", bench_fastpath_simple, 0);
+  report_benchmark("bench_fastpath_throughput", bench_fastpath_throughput, nullptr, 0);
+  return 0;
+  report_benchmark("bench_fastpath_dependent", bench_fastpath_dependent, nullptr, 0);
+  report_benchmark("bench_fastpath_simple", bench_fastpath_simple, nullptr, 0);
+  report_benchmark("bench_fastpath_stack_simple", bench_fastpath_stack_simple, nullptr, 32);
   for (int i = 8; i <= 512; i <<= 1) {
-    report_benchmark("bench_fastpath_stack", bench_fastpath_stack, i);
+    report_benchmark("bench_fastpath_stack", bench_fastpath_stack, nullptr, i);
   }
-  report_benchmark("bench_fastpath_stack_simple", bench_fastpath_stack_simple, 32);
-  report_benchmark("bench_fastpath_stack_simple", bench_fastpath_stack_simple, 8192);
-  report_benchmark("bench_fastpath_rnd_dependent", bench_fastpath_rnd_dependent, 32);
-  report_benchmark("bench_fastpath_rnd_dependent", bench_fastpath_rnd_dependent, 8192);
+  report_benchmark("bench_fastpath_stack_simple", bench_fastpath_stack_simple, nullptr, 32);
+  report_benchmark("bench_fastpath_stack_simple", bench_fastpath_stack_simple, nullptr, 8192);
+  report_benchmark("bench_fastpath_rnd_dependent", bench_fastpath_rnd_dependent, nullptr, 32);
+  report_benchmark("bench_fastpath_rnd_dependent", bench_fastpath_rnd_dependent, nullptr, 8192);
   return 0;
 }
