@@ -32,6 +32,12 @@
 #include <string.h>
 #include <sys/time.h>
 
+extern "C" void xiosim_roi_begin() __attribute__ ((noinline));
+extern "C" void xiosim_roi_end() __attribute__ ((noinline));
+
+void xiosim_roi_begin() { __asm__ __volatile__ ("":::"memory"); }
+void xiosim_roi_end() { __asm__ __volatile__ ("":::"memory"); }
+
 struct internal_bench {
   bench_body body;
   uintptr_t param;
@@ -80,9 +86,13 @@ void report_benchmark(const char *name, bench_body body, init_body init_fn, uint
 {
   int i;
   struct internal_bench b = {.body = body, .param = param, .init_fn = init_fn};
-  for (i = 0; i < 12; i++) {
+  for (i = 0; i < 13; i++) {
+
+    if (i == 1)
+      xiosim_roi_begin();
+
     if (b.init_fn)
-        b.init_fn();
+      b.init_fn();
 
     double nsec = run_benchmark(&b);
     int slen;
@@ -99,4 +109,6 @@ void report_benchmark(const char *name, bench_body body, init_body init_fn, uint
     printf("%*c%f nsec\n", padding_size, ' ', nsec);
     fflush(stdout);
   }
+
+  xiosim_roi_end();
 }
