@@ -6,7 +6,7 @@ FRAMEWORK_SRC=run_benchmark.c
 CFLAGS=-g -O3 -std=c++1y
 LDFLAGS=-lunwind -pthread
 
-UBS=malloc_bench tp tp_dep gauss gauss_free
+UBS=malloc_bench tp tp_dep gauss gauss_free prod
 UBS_NATIVE=$(addsuffix _native, ${UBS})
 all: ${UBS} ${UBS_NATIVE}
 
