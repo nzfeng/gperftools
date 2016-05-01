@@ -851,30 +851,79 @@ endif WITH_DEBUGALLOC
 if !MINGW
 noinst_LTLIBRARIES += librun_benchmark.la
 librun_benchmark_la_SOURCES = \
-	benchmark/run_benchmark.c benchmark/run_benchmark.h
+	benchmark/run_benchmark.cc benchmark/run_benchmark.h
 
-noinst_PROGRAMS += malloc_bench malloc_bench_shared \
-	binary_trees binary_trees_shared
+noinst_PROGRAMS += malloc_bench binary_trees \
+	tp tp_native \
+	tp_dep tp_dep_native \
+	gauss gauss_native \
+	gauss_free gauss_free_native \
+	prod prod_native
 
 malloc_bench_SOURCES = benchmark/malloc_bench.cc
 malloc_bench_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
 malloc_bench_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
 malloc_bench_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
 
-malloc_bench_shared_SOURCES = benchmark/malloc_bench.cc
-malloc_bench_shared_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-malloc_bench_shared_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS)
-malloc_bench_shared_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
 binary_trees_SOURCES = benchmark/binary_trees.cc
 binary_trees_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
 binary_trees_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
 binary_trees_LDADD = libtcmalloc_minimal.la $(PTHREAD_LIBS)
 
-binary_trees_shared_SOURCES = benchmark/binary_trees.cc
-binary_trees_shared_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-binary_trees_shared_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS)
-binary_trees_shared_LDADD = libtcmalloc_minimal.la $(PTHREAD_LIBS)
+NATIVE_FLAGS=-DNATIVE_FACTOR=64
+
+# Yeah, these are all identical. But why would you want looping constructs or functions
+# in a build *automation* system...
+tp_SOURCES = benchmark/tp.cc
+tp_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+tp_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+tp_native_SOURCES = benchmark/tp.cc
+tp_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+tp_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+tp_dep_SOURCES = benchmark/tp_dep.cc
+tp_dep_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+tp_dep_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_dep_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+tp_dep_native_SOURCES = benchmark/tp_dep.cc
+tp_dep_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+tp_dep_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_dep_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+gauss_SOURCES = benchmark/gauss.cc
+gauss_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+gauss_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+gauss_native_SOURCES = benchmark/gauss.cc
+gauss_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+gauss_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+gauss_free_SOURCES = benchmark/gauss_free.cc
+gauss_free_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+gauss_free_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_free_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+gauss_free_native_SOURCES = benchmark/gauss_free.cc
+gauss_free_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+gauss_free_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_free_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+prod_SOURCES = benchmark/prod.cc
+prod_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+prod_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+prod_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
+prod_native_SOURCES = benchmark/prod.cc
+prod_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+prod_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+prod_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
+
 endif !MINGW
 
 ### ------- tcmalloc (thread-caching malloc + heap profiler + heap checker)
