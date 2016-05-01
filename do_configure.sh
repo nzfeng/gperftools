@@ -1,8 +1,9 @@
 #!/bin/bash
 ./configure --prefix=/home/skanev/gperftools/install \
             --disable-shared \
-            CC=/group/vlsiarch/skanev/toolchain/bin/gcc \
-            CXX=/group/vlsiarch/skanev/toolchain/bin/g++ \
+            --enable-sized-delete \
+            CC=/group/vlsiarch/skanev/toolchain_6_1/bin/gcc \
+            CXX=/group/vlsiarch/skanev/toolchain_6_1/bin/g++ \
             CFLAGS="-I/home/skanev/libunwind/install/include -g" \
             CXXFLAGS="-I/home/skanev/libunwind/install/include -g -std=c++1y" \
             CPPFLAGS=-I/home/skanev/libunwind/install/include \
