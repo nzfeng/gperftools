@@ -4,7 +4,7 @@
             --enable-sized-delete \
             CC=/group/vlsiarch/skanev/toolchain_6_1/bin/gcc \
             CXX=/group/vlsiarch/skanev/toolchain_6_1/bin/g++ \
-            CFLAGS="-I/home/skanev/libunwind/install/include -g" \
-            CXXFLAGS="-I/home/skanev/libunwind/install/include -g -std=c++1y" \
+            CFLAGS="-I/home/skanev/libunwind/install/include -g -O3" \
+            CXXFLAGS="-I/home/skanev/libunwind/install/include -g -std=c++1y -O3" \
             CPPFLAGS=-I/home/skanev/libunwind/install/include \
-            LDFLAGS=-L/home/skanev/libunwind/install/lib
+            LDFLAGS="-L/home/skanev/libunwind/install/lib -O3"
