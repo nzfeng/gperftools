@@ -853,12 +853,8 @@ noinst_LTLIBRARIES += librun_benchmark.la
 librun_benchmark_la_SOURCES = \
 	benchmark/run_benchmark.cc benchmark/run_benchmark.h
 
-noinst_PROGRAMS += malloc_bench binary_trees \
-	tp tp_native \
-	tp_dep tp_dep_native \
-	gauss gauss_native \
-	gauss_free gauss_free_native \
-	prod prod_native
+noinst_PROGRAMS += malloc_bench binary_trees
+
 
 malloc_bench_SOURCES = benchmark/malloc_bench.cc
 malloc_bench_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
@@ -869,61 +865,6 @@ binary_trees_SOURCES = benchmark/binary_trees.cc
 binary_trees_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
 binary_trees_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
 binary_trees_LDADD = libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-NATIVE_FLAGS=-DNATIVE_FACTOR=64
-
-# Yeah, these are all identical. But why would you want looping constructs or functions
-# in a build *automation* system...
-tp_SOURCES = benchmark/tp.cc
-tp_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-tp_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-tp_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-tp_native_SOURCES = benchmark/tp.cc
-tp_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-tp_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-tp_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-tp_dep_SOURCES = benchmark/tp_dep.cc
-tp_dep_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-tp_dep_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-tp_dep_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-tp_dep_native_SOURCES = benchmark/tp_dep.cc
-tp_dep_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-tp_dep_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-tp_dep_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-gauss_SOURCES = benchmark/gauss.cc
-gauss_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-gauss_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-gauss_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-gauss_native_SOURCES = benchmark/gauss.cc
-gauss_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-gauss_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-gauss_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-gauss_free_SOURCES = benchmark/gauss_free.cc
-gauss_free_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-gauss_free_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-gauss_free_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-gauss_free_native_SOURCES = benchmark/gauss_free.cc
-gauss_free_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-gauss_free_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-gauss_free_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-prod_SOURCES = benchmark/prod.cc
-prod_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-prod_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-prod_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
-prod_native_SOURCES = benchmark/prod.cc
-prod_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-prod_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
-prod_native_LDADD = librun_benchmark.la libtcmalloc_minimal.la $(PTHREAD_LIBS)
-
 endif !MINGW
 
 ### ------- tcmalloc (thread-caching malloc + heap profiler + heap checker)
@@ -1184,6 +1125,71 @@ heap_checker_unittest_LDFLAGS = -g $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS)
 heap_checker_unittest_LDADD = $(LIBTCMALLOC) liblogging.la $(PTHREAD_LIBS)
 
 endif WITH_HEAP_CHECKER
+
+# Microbenchmarks
+# We want these to depend on libtcmalloc, not libtcmalloc_minimal, because the
+# latter is built without sampling.
+if !MINGW
+noinst_PROGRAMS += tp tp_native \
+	tp_dep tp_dep_native \
+	gauss gauss_native \
+	gauss_free gauss_free_native \
+	prod prod_native
+
+NATIVE_FLAGS=-DNATIVE_FACTOR=64
+
+# Yeah, these are all identical. But why would you want looping constructs or functions
+# in a build *automation* system...
+tp_SOURCES = benchmark/tp.cc
+tp_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+tp_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+tp_native_SOURCES = benchmark/tp.cc
+tp_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+tp_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+tp_dep_SOURCES = benchmark/tp_dep.cc
+tp_dep_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+tp_dep_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_dep_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+tp_dep_native_SOURCES = benchmark/tp_dep.cc
+tp_dep_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+tp_dep_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+tp_dep_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+gauss_SOURCES = benchmark/gauss.cc
+gauss_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+gauss_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+gauss_native_SOURCES = benchmark/gauss.cc
+gauss_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+gauss_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+gauss_free_SOURCES = benchmark/gauss_free.cc
+gauss_free_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+gauss_free_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_free_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+gauss_free_native_SOURCES = benchmark/gauss_free.cc
+gauss_free_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+gauss_free_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+gauss_free_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+prod_SOURCES = benchmark/prod.cc
+prod_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+prod_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+prod_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+prod_native_SOURCES = benchmark/prod.cc
+prod_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+prod_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static
+prod_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+endif !MINGW
 
 ### Documentation (above and beyond tcmalloc_minimal documentation)
 if WITH_HEAP_PROFILER
