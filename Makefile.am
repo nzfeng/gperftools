@@ -17,6 +17,7 @@ endif !WITH_STACK_TRACE
 
 # This is mostly based on configure options
 AM_CXXFLAGS =
+AM_LDFLAGS =
 
 NO_BUILTIN_CXXFLAGS =
 
@@ -44,6 +45,13 @@ if I386
 AM_CXXFLAGS += -mmmx
 AM_CXXFLAGS += -fno-omit-frame-pointer
 endif I386
+if FDO_INSTRUMENT
+AM_CXXFLAGS += -fprofile-generate=./fdo -fno-data-sections
+AM_LDFLAGS += -fprofile-generate=./fdo -fno-data-sections
+endif FDO_INSTRUMENT
+if FDO_OPTIMIZE
+AM_CXXFLAGS += -fprofile-use=./fdo -fprofile-correction
+endif FDO_OPTIMIZE
 endif GCC
 if HAVE_W_NO_UNUSED_RESULT
 AM_CXXFLAGS += -Wno-unused-result
@@ -54,7 +62,9 @@ endif HAVE_SIZED_DEALLOCATION
 
 # The -no-undefined flag allows libtool to generate shared libraries for
 # Cygwin and MinGW.  LIBSTDCXX_LA_LINKER_FLAG is used to fix a Solaris bug.
-AM_LDFLAGS = -no-undefined $(LIBSTDCXX_LA_LINKER_FLAG)
+# SK: disable. Don't care about these, but care about AM_LDFLAGS getting passed
+# to targets.
+# AM_LDFLAGS += -no-undefined $(LIBSTDCXX_LA_LINKER_FLAG)
 
 # We know our low-level code cannot trigger an exception.  On some
 # systems, such as cygwin, it would be disastrous if they did, because
@@ -674,7 +684,7 @@ malloc_extension_c_test_CFLAGS = $(PTHREAD_CFLAGS) $(AM_CFLAGS)
 if GCC
 malloc_extension_c_test_CFLAGS += -ansi
 endif GCC
-malloc_extension_c_test_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS)
+malloc_extension_c_test_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) $(AM_LDFLAGS)
 malloc_extension_c_test_LDADD = $(LIBTCMALLOC_MINIMAL) $(PTHREAD_LIBS) -lstdc++ -lm
 endif !MINGW
 
@@ -1025,7 +1035,7 @@ WINDOWS_PROJECTS += vsprojects/sampler_test/sampler_test.vcproj
 sampler_test_SOURCES = src/tests/sampler_test.cc \
                        src/config_for_unittests.h
 sampler_test_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS)
-sampler_test_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS)
+sampler_test_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) $(AM_LDFLAGS)
 sampler_test_LDADD = $(LIBTCMALLOC) $(PTHREAD_LIBS) -lm
 
 
@@ -1347,7 +1357,7 @@ TESTS += profile_handler_unittest
 profile_handler_unittest_SOURCES = src/tests/profile-handler_unittest.cc \
                                    src/profile-handler.h
 profile_handler_unittest_CXXFLAGS = $(PTHREAD_CFLAGS)
-profile_handler_unittest_LDFLAGS = $(PTHREAD_CFLAGS)
+profile_handler_unittest_LDFLAGS = $(PTHREAD_CFLAGS) $(AM_LDFLAGS)
 profile_handler_unittest_LDADD = $(LIBPROFILER) $(PTHREAD_LIBS)
 
 TESTS += profiler_unittest.sh$(EXEEXT)

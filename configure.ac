@@ -133,6 +133,18 @@ case "$with_tcmalloc_alignment" in
        AC_MSG_WARN([${with_tcmalloc_alignment} bytes not supported, using default tcmalloc allocation alignment.])
 esac
 
+default_enable_fdo=no
+AC_ARG_ENABLE([fdo],
+              [AS_HELP_STRING([--enable-fdo],
+                              [FDO build type no|instrument|optimize])],
+              [],
+              [enable_fdo="$default_enable_fdo"])
+
+AM_CONDITIONAL(FDO_INSTRUMENT,
+               test "$enable_fdo" = instrument)
+AM_CONDITIONAL(FDO_OPTIMIZE,
+               test "$enable_fdo" = optimize)
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
