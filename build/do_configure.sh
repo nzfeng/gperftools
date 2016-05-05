@@ -7,7 +7,7 @@ then
     exit 1
 fi
 
-./configure --prefix=/home/skanev/gperftools/install \
+../configure --prefix="/home/${USER}/gperftools/install" \
             --disable-shared \
             --enable-sized-delete \
             --enable-fdo=${FDO} \
