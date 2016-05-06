@@ -55,8 +55,20 @@ inline void SLL_Push(void **list, void *element) {
 }
 
 inline void *SLL_Pop(void **list) {
+#ifndef TCMALLOC_LIST_POP_MAGIC
   void *result = *list;
   *list = SLL_Next(*list);
+#else
+  void *result;
+  // We're hijacking lzcnt so the simulator can insert whatever repalcement
+  // code we want (real or idealized). It will take care of ignoring the new
+  // instruction and inmplementing the semantics SLL_Pop, so execution is still
+  // correct.
+  __asm__ __volatile__ ("lzcntq %1, %0"
+                        :"=r"(result)
+                        :"g"(list)
+                        :"memory" );
+#endif
   return result;
 }
 

@@ -145,6 +145,12 @@ AM_CONDITIONAL(FDO_INSTRUMENT,
 AM_CONDITIONAL(FDO_OPTIMIZE,
                test "$enable_fdo" = optimize)
 
+AC_ARG_ENABLE([list-pop-magic],
+              [AS_HELP_STRING([--enable-list-pop-magic],
+                             [ASDASD])],
+              [AC_DEFINE([TCMALLOC_LIST_POP_MAGIC], [], [asdasdas])],
+              [])
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
