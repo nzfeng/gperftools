@@ -110,6 +110,8 @@ void Sampler::InitStatics() {
 // log_2(q) * (-log_e(2) * 1/m) = x
 // In the code, q is actually in the range 1 to 2**26, hence the -26 below
 size_t Sampler::PickNextSamplingPoint() {
+  if (FLAGS_tcmalloc_sample_parameter == 0)
+      return std::numeric_limits<size_t>::max();
   rnd_ = NextRandom(rnd_);
   // Take the top 26 bits as the random number
   // (This plus the 1<<58 sampling bound give a max possible step of
