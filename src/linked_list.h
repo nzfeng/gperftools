@@ -65,7 +65,7 @@ inline void *SLL_Pop(void **list) {
   // instruction and inmplementing the semantics SLL_Pop, so execution is still
   // correct.
   __asm__ __volatile__ ("lzcntq %1, %0"
-                        :"=r"(result)
+                        :"=&r"(result)
                         :"g"(list)
                         :"memory" );
 #endif
