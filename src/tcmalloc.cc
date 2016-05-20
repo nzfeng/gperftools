@@ -263,6 +263,14 @@ extern "C" {
   void tc_deletearray_nothrow(void* ptr, const std::nothrow_t&) __THROW
       ATTRIBUTE_SECTION(google_malloc);
 
+  // And the sized versions:
+  void tc_delete_sized(void *p, size_t size) throw()
+      ATTRIBUTE_SECTION(google_malloc);
+  void tc_deletearray_sized(void *p, size_t size) throw()
+      ATTRIBUTE_SECTION(google_malloc);
+  void tc_free_sized(void *p, size_t size) throw()
+      ATTRIBUTE_SECTION(google_malloc);
+
   // Some non-standard extensions that we support.
 
   // This is equivalent to
