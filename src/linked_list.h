@@ -50,8 +50,15 @@ inline void SLL_SetNext(void *t, void *n) {
 }
 
 inline void SLL_Push(void **list, void *element) {
+#ifndef TCMALLOC_LIST_PUSH_MAGIC
   SLL_SetNext(element, *list);
   *list = element;
+#else
+  __asm__ __volatile__ ("popcntq %1, %0"
+                        :
+                        :"r"(list), "r"(element)
+                        :"memory");
+#endif
 }
 
 inline void *SLL_Pop(void **list) {

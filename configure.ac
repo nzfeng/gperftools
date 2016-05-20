@@ -151,6 +151,12 @@ AC_ARG_ENABLE([list-pop-magic],
               [AC_DEFINE([TCMALLOC_LIST_POP_MAGIC], [], [asdasdas])],
               [])
 
+AC_ARG_ENABLE([list-push-magic],
+              [AS_HELP_STRING([--enable-list-push-magic],
+                             [ASDASD])],
+              [AC_DEFINE([TCMALLOC_LIST_PUSH_MAGIC], [], [asdasdas])],
+              [])
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
