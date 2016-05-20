@@ -54,7 +54,7 @@ inline void SLL_Push(void **list, void *element) {
   SLL_SetNext(element, *list);
   *list = element;
 #else
-  __asm__ __volatile__ ("popcntq %1, %0"
+  __asm__ __volatile__ ("popcntq %0, %1"
                         :
                         :"r"(list), "r"(element)
                         :"memory");
