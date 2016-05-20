@@ -346,7 +346,7 @@ inline int ThreadCache::HeapsInUse() {
 
 inline bool ThreadCache::SampleAllocation(size_t k) {
 #ifndef NO_TCMALLOC_SAMPLES
-  return UNLIKELY(FLAGS_tcmalloc_sample_parameter > 0) && sampler_.SampleAllocation(k);
+  return sampler_.SampleAllocation(k);
 #else
   return false;
 #endif
