@@ -7,8 +7,8 @@ rm -rf fdo_build*
 mkdir fdo_build
 cd fdo_build
 
-../build/do_configure.sh instrument
-make -j24
+../build/do_configure.sh instrument no || exit 1
+make -j24 || exit 1
 
 cd ..
 
@@ -25,8 +25,8 @@ do
     ./${BMK}
 
     echo "Compiling opt for ${BMK}..."
-    ../build/do_configure.sh optimize
-    make -j24
+    ../build/do_configure.sh optimize list_magic || exit 1
+    make -j24 || exit 1
 
     cp ${BMK} ../output/
     cp ${BMK}_native ../output/
