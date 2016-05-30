@@ -12,7 +12,7 @@ SECTIONS
 {
   /* Read-only sections, merged into text segment: */
   PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x400000)); . = SEGMENT_START("text-segment", 0x400000) + SIZEOF_HEADERS;
-  google_malloc    : { ./.libs/libtcmalloc.a(.text) }
+  google_malloc    : { ./.libs/libtcmalloc.a(.text .text.hot .text.unlikely .text.startup .text.exit) }
   .interp         : { *(.interp) }
   .note.gnu.build-id : { *(.note.gnu.build-id) }
   .hash           : { *(.hash) }
