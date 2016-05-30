@@ -54,8 +54,13 @@ inline void SLL_Push(void **list, void *element) {
   SLL_SetNext(element, *list);
   *list = element;
 #else
-  __asm__ __volatile__ ("btq %1, %0"
-                        :
+  // We use bextr because it's one of the few instructions
+  // with two read operands. We ignore the write operand,
+  // but make sure to set it to earlyclobber, so that we don't
+  // use the same register as either of the other two.
+  uint64_t jnk;
+  __asm__ __volatile__ ("bextrq %2, %1, %0"
+                        :"=&r"(jnk)
                         :"r"(list), "r"(element)
                         :"memory");
 #endif

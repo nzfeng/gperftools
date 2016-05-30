@@ -18,8 +18,7 @@ fi
 MAGIC_FLAGS=""
 if [ "$MAGIC" == "list_magic" ]
 then
-    MAGIC_FLAGS="--enable-list-pop-magic"
-# --enable-list-push-magic" for now, turns out fdo builds use the bt instruction
+    MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic"
 fi
 
 ../configure --prefix="/home/${USER}/gperftools/install" \
