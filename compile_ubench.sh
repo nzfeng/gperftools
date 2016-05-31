@@ -1,7 +1,9 @@
 #!/bin/bash
 
+OUTPUT_DIR=output
+
 UB="tp tp_dep gauss gauss_free prod"
-mkdir -p output
+mkdir -p ${OUTPUT_DIR}
 
 rm -rf fdo_build*
 mkdir fdo_build
@@ -28,8 +30,8 @@ do
     ../build/do_configure.sh optimize list_magic || exit 1
     make -j24 || exit 1
 
-    cp ${BMK} ../output/
-    cp ${BMK}_native ../output/
+    cp ${BMK} ../${OUTPUT_DIR}/
+    cp ${BMK}_native ../${OUTPUT_DIR}/
 
     cd ..
 done
