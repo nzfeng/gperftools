@@ -207,11 +207,23 @@ class SizeMap {
     // Use unsigned arithmetic to avoid unnecessary sign extensions.
     ASSERT(0 <= s);
     ASSERT(s <= kMaxSize);
+#ifndef TCMALLOC_SIZE_CLASS_MAGIC
     if (LIKELY(s <= kMaxSmallSize)) {
       return SmallSizeClass(s);
     } else {
       return LargeSizeClass(s);
     }
+#else
+    // Hijacking blsr instruction for magic size-class index calculation.
+    // Size goes into read operand and calculated index goes into write
+    // operand.
+    size_t idx;
+    __asm__ __volatile__("blsrq %1, %0"
+                         : "=&r"(idx)
+                         : "r"(s)
+                        );
+    return idx;
+#endif
   }
 
   int NumMoveSize(size_t size);

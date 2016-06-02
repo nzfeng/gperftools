@@ -18,7 +18,7 @@ fi
 MAGIC_FLAGS=""
 if [ "$MAGIC" == "list_magic" ]
 then
-    MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic"
+    MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic --enable-size-class-magic"
 fi
 
 ../configure --prefix="/home/${USER}/gperftools/install" \

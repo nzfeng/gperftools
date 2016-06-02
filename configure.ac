@@ -147,14 +147,20 @@ AM_CONDITIONAL(FDO_OPTIMIZE,
 
 AC_ARG_ENABLE([list-pop-magic],
               [AS_HELP_STRING([--enable-list-pop-magic],
-                             [ASDASD])],
-              [AC_DEFINE([TCMALLOC_LIST_POP_MAGIC], [], [asdasdas])],
+                             [Enable magic linked-list pop instruction.])],
+              [AC_DEFINE([TCMALLOC_LIST_POP_MAGIC], [], [Enable magic linked-list pop instruction.])],
               [])
 
 AC_ARG_ENABLE([list-push-magic],
               [AS_HELP_STRING([--enable-list-push-magic],
-                             [ASDASD])],
-              [AC_DEFINE([TCMALLOC_LIST_PUSH_MAGIC], [], [asdasdas])],
+                             [Enable magic linked-list push instruction.])],
+              [AC_DEFINE([TCMALLOC_LIST_PUSH_MAGIC], [], [Enable magic linked-list push instruction.])],
+              [])
+
+AC_ARG_ENABLE([size-class-magic],
+              [AS_HELP_STRING([--enable-size-class-magic],
+                             [Enable magic size class index calculation instruction.])],
+              [AC_DEFINE([TCMALLOC_SIZE_CLASS_MAGIC], [], [Enable magic size class index calculation instruction.])],
               [])
 
 # Checks for programs.
