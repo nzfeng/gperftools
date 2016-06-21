@@ -2,23 +2,26 @@
 FDO=${1:-no}
 MAGIC=${2:-no}
 
-USAGE="Usage: $0 [no|instrument|optimize] [no|list_magic]"
+USAGE="Usage: $0 [no|instrument|optimize] [no|all_magic|list_magic]"
 if [ "$FDO" != "no" ]  && [ "$FDO" != "instrument" ] && [ "$FDO" != "optimize" ]
 then
     echo ${USAGE}
     exit 1
 fi
 
-if [ "$MAGIC" != "no" ]  && [ "$MAGIC" != "list_magic" ]
+if [ "$MAGIC" != "no" ]  && [ "$MAGIC" != "list_magic" ] && [ "$MAGIC" != "all_magic" ]
 then
     echo ${USAGE}
     exit 1
 fi
 
 MAGIC_FLAGS=""
-if [ "$MAGIC" == "list_magic" ]
+if [ "$MAGIC" == "all_magic" ]
 then
-    MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic --enable-size-class-magic"
+    MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic --enable-size-class-magic --enable-sample-magic"
+elif [ "$MAGIC" == "list_magic" ]
+then
+    MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic"
 fi
 
 ../configure --prefix="/home/${USER}/gperftools/install" \
