@@ -247,15 +247,10 @@ class SizeMap {
   }
 
   inline bool MaybeSizeClass(size_t size, size_t *size_class) {
-    size_t class_idx;
-    if (LIKELY(size <= kMaxSmallSize)) {
-      class_idx = SmallSizeClass(size);
-    } else if (size <= kMaxSize) {
-      class_idx = LargeSizeClass(size);
-    } else {
+    if (UNLIKELY(size > kMaxSize))
       return false;
-    }
-    *size_class = class_array_[class_idx];
+    else
+      *size_class = SizeClass(size);
     return true;
   }
 
