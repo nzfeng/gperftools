@@ -162,6 +162,11 @@ AC_ARG_ENABLE([size-class-magic],
                              [Enable magic size class index calculation instruction.])],
               [AC_DEFINE([TCMALLOC_SIZE_CLASS_MAGIC], [], [Enable magic size class index calculation instruction.])],
               [])
+AC_ARG_ENABLE([sample-magic],
+              [AS_HELP_STRING([--enable-sample-magic],
+                             [Enable magic sampling.])],
+              [AC_DEFINE([TCMALLOC_SAMPLING_MAGIC], [], [Enable magic sampling.])],
+              [])
 
 AC_ARG_ENABLE([sample-magic],
               [AS_HELP_STRING([--enable-sample-magic],

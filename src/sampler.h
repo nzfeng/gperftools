@@ -139,6 +139,7 @@ class PERFTOOLS_DLL_DECL Sampler {
 };
 
 inline bool Sampler::SampleAllocation(size_t k) {
+#ifndef TCMALLOC_SAMPLING_MAGIC
   if (bytes_until_sample_ < k) {
     bytes_until_sample_ = PickNextSamplingPoint();
     return true;
@@ -146,6 +147,22 @@ inline bool Sampler::SampleAllocation(size_t k) {
     bytes_until_sample_ -= k;
     return false;
   }
+#else
+  bool res;
+  __asm__ __volatile__("adc %1, %0"
+                       : "=m"(bytes_until_sample_)
+                       : "r"(k)
+                       : "cc"
+                      );
+  __asm__ __volatile("lahf"
+                     : "=A"(res)
+                     :
+                     :
+                    );
+  if (res)
+    bytes_until_sample_ = PickNextSamplingPoint();
+  return res;
+#endif
 }
 
 // Inline functions which are public for testing purposes
