@@ -99,6 +99,7 @@ class ThreadCache {
   // Record allocation of "k" bytes.  Return true iff allocation
   // should be sampled
   bool SampleAllocation(size_t k);
+  bool SampleSizeClass();
 
   static void         InitModule();
   static void         InitTSD();
@@ -342,6 +343,14 @@ extern PageHeapAllocator<ThreadCache> threadcache_allocator;
 
 inline int ThreadCache::HeapsInUse() {
   return threadcache_allocator.inuse();
+}
+
+inline bool ThreadCache::SampleSizeClass() {
+#ifdef TCMALLOC_SIZE_CLASS_SAMPLES
+  return sampler_.SampleSizeClass();
+#else
+  return false;
+#endif
 }
 
 inline bool ThreadCache::SampleAllocation(size_t k) {

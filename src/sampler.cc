@@ -49,11 +49,16 @@ using std::min;
 #ifdef NO_TCMALLOC_SAMPLES
 DEFINE_int64(tcmalloc_sample_parameter, 0,
              "Unused: code is compiled with NO_TCMALLOC_SAMPLES");
+DEFINE_int64(tcmalloc_size_class_sample_parameter, 0,
+             "Unused: code is compiled with NO_TCMALLOC_SAMPLES");
 #else
 DEFINE_int64(tcmalloc_sample_parameter,
              EnvToInt64("TCMALLOC_SAMPLE_PARAMETER", 0),
              "The approximate gap in bytes between sampling actions. "
              "This must be between 1 and 2^58.");
+DEFINE_int64(tcmalloc_size_class_sample_parameter,
+             EnvToInt64("TCMALLOC_SIZE_CLASS_SAMPLE_PARAMETER", 0),
+             "The number of small malloc class between size class samples.");
 #endif
 
 namespace tcmalloc {
@@ -97,11 +102,25 @@ void Sampler::Init(uint32_t seed) {
       !sample_parameter ? 0 : strtol(sample_parameter, NULL, 10);
   // Initialize counter
   bytes_until_sample_ = PickNextSamplingPoint();
+
+  // For size class sampling too.
+  const char *size_class_sample_parameter =
+      TCMallocGetenvSafe("TCMALLOC_SIZE_CLASS_SAMPLE_PARAMETER");
+  FLAGS_tcmalloc_size_class_sample_parameter =
+      !size_class_sample_parameter ? 0 : strtol(size_class_sample_parameter,
+                                                  NULL, 10);
+  mallocs_until_sample_ = ResetSizeClassSamplingPoint();
 }
 
 // Initialize the Statics for the Sampler class
 void Sampler::InitStatics() {
   PopulateFastLog2Table();
+}
+
+size_t Sampler::ResetSizeClassSamplingPoint() {
+  if (FLAGS_tcmalloc_size_class_sample_parameter == 0)
+      return std::numeric_limits<size_t>::max();
+  return FLAGS_tcmalloc_size_class_sample_parameter;
 }
 
 // Generates a geometric variable with the specified mean (512K by default).

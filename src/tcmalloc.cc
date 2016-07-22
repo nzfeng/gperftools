@@ -1182,6 +1182,9 @@ ALWAYS_INLINE void* do_malloc_small(ThreadCache* heap, size_t size) {
   size_t cl = Static::sizemap()->SizeClass(size);
   size = Static::sizemap()->class_to_size(cl);
 
+  if (heap->SampleSizeClass())
+    Log(kLog, "", 0, "SC: ", cl, size);
+
   if (UNLIKELY(heap->SampleAllocation(size))) {
     return DoSampledAllocation(size);
   } else {

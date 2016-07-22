@@ -174,6 +174,12 @@ AC_ARG_ENABLE([sample-magic],
               [AC_DEFINE([NO_TCMALLOC_SAMPLES], [], [Remove sampling code.])],
               [])
 
+AC_ARG_ENABLE([size-class-samples],
+              [AS_HELP_STRING([--enable-size-class-samples],
+                             [Enable size class sampling code.])],
+              [AC_DEFINE([TCMALLOC_SIZE_CLASS_SAMPLES], [], [Enable size class sampling code.])],
+              [])
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC

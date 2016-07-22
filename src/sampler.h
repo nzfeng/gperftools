@@ -111,9 +111,11 @@ class PERFTOOLS_DLL_DECL Sampler {
   // Record allocation of "k" bytes.  Return true iff allocation
   // should be sampled
   bool SampleAllocation(size_t k);
+  bool SampleSizeClass();
 
   // Generate a geometric with mean 512K (or FLAG_tcmalloc_sample_parameter)
   size_t PickNextSamplingPoint();
+  size_t ResetSizeClassSamplingPoint();
 
   // Initialize the statics for the Sampler class
   static void InitStatics();
@@ -128,6 +130,7 @@ class PERFTOOLS_DLL_DECL Sampler {
 
  private:
   size_t        bytes_until_sample_;    // Bytes until we sample next
+  size_t        mallocs_until_sample_;  // Mallocs until we sample size class next.
   uint64_t      rnd_;                   // Cheap random number generator
 
   // Statics for the fast log
@@ -137,6 +140,16 @@ class PERFTOOLS_DLL_DECL Sampler {
   static const int kFastlogMask = (1 << kFastlogNumBits) - 1;
   static double log_table_[1<<kFastlogNumBits];  // Constant
 };
+
+inline bool Sampler::SampleSizeClass() {
+  if (mallocs_until_sample_ == 0) {
+    mallocs_until_sample_ = ResetSizeClassSamplingPoint();
+    return true;
+  } else {
+    mallocs_until_sample_--;
+    return false;
+  }
+}
 
 inline bool Sampler::SampleAllocation(size_t k) {
 #ifndef TCMALLOC_SAMPLING_MAGIC
