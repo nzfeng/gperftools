@@ -1,19 +1,32 @@
 #!/bin/bash
 
-OUTPUT_DIR=output
+MAGIC=size_class_samples
+OUTPUT_DIR=output_${MAGIC}
 
 UB="tp tp_dep gauss gauss_free prod"
 mkdir -p ${OUTPUT_DIR}
 
-rm -rf fdo_build*
-mkdir fdo_build
-cd fdo_build
+# rm -rf fdo_build*
+# mkdir fdo_build
+# cd fdo_build
 
-../build/do_configure.sh instrument no || exit 1
+cd build
+
+./do_configure.sh no ${MAGIC} || exit 1
 make -j24 || exit 1
+
+for BMK in ${UB}
+do
+  cp ${BMK} ../${OUTPUT_DIR}/
+  cp ${BMK}_native ../${OUTPUT_DIR}/
+done
 
 cd ..
 
+# Don't do FDO builds.
+exit 0
+
+# For FDO.
 # yeah, this is ugly, but seems to be the only way
 # to pass the right profiles for libtcmalloc, not just
 # the bmk wrapper
