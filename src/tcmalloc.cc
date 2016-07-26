@@ -1179,8 +1179,8 @@ inline void* do_malloc_pages(ThreadCache* heap, size_t size) {
 ALWAYS_INLINE void* do_malloc_small(ThreadCache* heap, size_t size) {
   ASSERT(Static::IsInited());
   ASSERT(heap != NULL);
-  size_t cl = Static::sizemap()->SizeClass(size);
-  size = Static::sizemap()->class_to_size(cl);
+  size_t cl;
+  Static::sizemap()->MagicSizeClassOrFallback(&size, &cl);
 
   if (heap->SampleSizeClass())
     Log(kLog, "", 0, "SC: ", cl, size);

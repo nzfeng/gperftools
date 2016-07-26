@@ -1145,7 +1145,8 @@ noinst_PROGRAMS += tp tp_native \
 	tp_dep tp_dep_native \
 	gauss gauss_native \
 	gauss_free gauss_free_native \
-	prod prod_native
+	prod prod_native \
+	size_class_cache size_class_cache_native
 
 NATIVE_FLAGS=-DNATIVE_FACTOR=64
 
@@ -1200,6 +1201,16 @@ prod_native_SOURCES = benchmark/prod.cc
 prod_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
 prod_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
 prod_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+size_class_cache_SOURCES = benchmark/size_class_cache.cc
+size_class_cache_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+size_class_cache_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+size_class_cache_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+size_class_cache_native_SOURCES = benchmark/size_class_cache.cc
+size_class_cache_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+size_class_cache_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+size_class_cache_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 endif !MINGW
 
 ### Documentation (above and beyond tcmalloc_minimal documentation)

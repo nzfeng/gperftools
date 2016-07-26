@@ -207,23 +207,11 @@ class SizeMap {
     // Use unsigned arithmetic to avoid unnecessary sign extensions.
     ASSERT(0 <= s);
     ASSERT(s <= kMaxSize);
-#ifndef TCMALLOC_SIZE_CLASS_MAGIC
     if (LIKELY(s <= kMaxSmallSize)) {
       return SmallSizeClass(s);
     } else {
       return LargeSizeClass(s);
     }
-#else
-    // Hijacking blsr instruction for magic size-class index calculation.
-    // Size goes into read operand and calculated index goes into write
-    // operand.
-    size_t idx;
-    __asm__ __volatile__("blsrq %1, %0"
-                         : "=&r"(idx)
-                         : "r"(s)
-                        );
-    return idx;
-#endif
   }
 
   int NumMoveSize(size_t size);
@@ -254,6 +242,7 @@ class SizeMap {
     return true;
   }
 
+  // Baseline implementation of size class and size computation.
   // Get the byte-size for a specified class
   inline size_t ByteSizeForClass(size_t cl) {
     return class_to_size_[cl];
@@ -267,6 +256,39 @@ class SizeMap {
   // Mapping from size class to number of pages to allocate at a time
   inline size_t class_to_pages(size_t cl) {
     return class_to_pages_[cl];
+  }
+
+  inline void SizeClassFallback(size_t* size, size_t* cl) {
+    *cl = SizeClass(*size);
+    *size = class_to_size(*cl);
+  }
+
+  // Compute size class via magic instruction or via software fallback if the
+  // magic instruction fails.
+  inline void MagicSizeClassOrFallback(size_t* size, size_t* cl) {
+#ifdef TCMALLOC_SIZE_CLASS_MAGIC
+    // Hijacking blsr instruction for magic size class computation.
+    // Read operand is the requested size.  Size class goes into write operand;
+    // allocated size overwrites the read operand.
+    __asm__ __volatile__("blsrq %1, %0"
+                         : "=&r"(*cl)
+                         : "r"(*size)
+                        );
+    size_t orig_size = *size;
+    if (*cl == 0) {
+      // There is no size class zero, so we can use this to indicate lookup
+      // failure and simplify emulation.
+      SizeClassFallback(size, cl);
+      // Update the cache. We need three read operands: original requested
+      // size, allocated size, and size class.
+      __asm__ __volatile__("shldq %2, %1, %0"
+                           : "+D"(orig_size)
+                           : "r"(*size), "c"(static_cast<uint8_t>(*cl)));
+    }
+
+#else
+    SizeClassFallback(size, cl);
+#endif
   }
 
   // Number of objects to move between a per-thread list and a central
