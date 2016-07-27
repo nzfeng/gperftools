@@ -95,14 +95,18 @@ inline void SLL_PopRange(void **head, int N, void **start, void **end) {
     return;
   }
 
-  void *tmp = *head;
-  for (int i = 1; i < N; ++i) {
-    tmp = SLL_Next(tmp);
-  }
-
+  // SK: Changed to use SLL_Pop.
+  // The only difference is the blind writes to *head on every call to SLL_Pop.
+  // HW is smart though, so it will write-combine them anyway.
+  // This way though, in the non-baseline cases, we can use our pop instruction
+  // and the ideal case doesn't touch free list memory any more.
+  // XXX: This is onlt called from ReleaseToCentralCache btw.
   *start = *head;
+  void *tmp = *head;
+  for (int i = 0; i < N; ++i) {
+    tmp = SLL_Pop(head);
+  }
   *end = tmp;
-  *head = SLL_Next(tmp);
   // Unlink range from list.
   SLL_SetNext(tmp, NULL);
 }
