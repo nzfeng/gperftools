@@ -90,6 +90,7 @@ class ThreadCache {
   // Allocate an object of the given size and class. The size given
   // must be the same as the size of the class in the size map.
   void* Allocate(size_t size, size_t cl);
+  void* AllocateFallback(size_t size, size_t cl);
   void Deallocate(void* ptr, size_t size_class);
 
   void Scavenge();
@@ -361,16 +362,42 @@ inline bool ThreadCache::SampleAllocation(size_t k) {
 #endif
 }
 
-inline void* ThreadCache::Allocate(size_t size, size_t cl) {
-  ASSERT(size <= kMaxSize);
-  ASSERT(size == Static::sizemap()->ByteSizeForClass(cl));
-
+inline void* ThreadCache::AllocateFallback(size_t size, size_t cl) {
   FreeList* list = &list_[cl];
   if (UNLIKELY(list->empty())) {
     return FetchFromCentralCache(cl, size);
   }
   size_ -= size;
   return list->Pop();
+}
+
+inline void* ThreadCache::Allocate(size_t size, size_t cl) {
+  ASSERT(size <= kMaxSize);
+  ASSERT(size == Static::sizemap()->ByteSizeForClass(cl));
+#ifdef TCMALLOC_LIST_POP_MAGIC
+  void* head = NULL;
+  void* fallback_result;
+  uint64_t jnk;
+  // Lookup the head of this size class and set flags.
+  __asm__ __volatile__("shrdq $0, %1, %0"
+                       :"=&r"(head)
+                       :"r"(cl));
+
+  // The pop and metadata operations still need to actually happen.
+  fallback_result = AllocateFallback(size, cl);
+  // If we missed in the cache, use the fallback's result.
+  if (!head)
+      head = fallback_result;
+
+  // Update the cache by prefetching the next head pointer into the cache.
+  __asm__ __volatile__("shrxq %2, %1, %0"
+                       :"=&r"(jnk)
+                       :"m"(*reinterpret_cast<void**>(head)), "r"(cl)
+                       :);
+  return head;
+#else
+  return AllocateFallback(size, cl);
+#endif
 }
 
 inline void ThreadCache::Deallocate(void* ptr, size_t cl) {
@@ -384,6 +411,14 @@ inline void ThreadCache::Deallocate(void* ptr, size_t cl) {
   ASSERT(ptr != list->Next());
 
   list->Push(ptr);
+#if 0
+  // Update the cache by pushing this head onto the cache.
+  uint64_t jnk;
+  __asm__ __volatile__("shrxq %2, %1, %0"
+                       :"=&r"(jnk)
+                       :"r"(head), "r"(cl)
+                       :);
+#endif
   ssize_t list_headroom =
       static_cast<ssize_t>(list->max_length()) - list->length();
 
