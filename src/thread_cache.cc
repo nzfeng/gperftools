@@ -116,6 +116,16 @@ void ThreadCache::Cleanup() {
 // Remove some objects of class "cl" from central cache and add to thread heap.
 // On success, return the first object for immediate use; otherwise return NULL.
 void* ThreadCache::FetchFromCentralCache(size_t cl, size_t byte_size) {
+#ifdef TCMALLOC_LIST_POP_MAGIC
+  uint64_t null = 0;
+  uint64_t jnk;
+  // Invalidate the cache entry for cl by setting it to NULL. The addition of a
+  // few instructions on the slow path doesn't make any difference.
+  __asm__ __volatile__("shrxq %2, %1, %0"
+                       :"=r"(jnk)
+                       :"r"(cl), "r"(null)
+                       :);
+#endif
   FreeList* list = &list_[cl];
   ASSERT(list->empty());
   const int batch_size = Static::sizemap()->num_objects_to_move(cl);
@@ -181,6 +191,16 @@ void ThreadCache::ReleaseToCentralCache(FreeList* src, size_t cl, int N) {
   ASSERT(src == &list_[cl]);
   if (N > src->length()) N = src->length();
   size_t delta_bytes = N * Static::sizemap()->ByteSizeForClass(cl);
+
+#ifdef TCMALLOC_LIST_POP_MAGIC
+  uint64_t jnk;
+  uint64_t null = 0;
+  // Invalidate the cache entry for cl by setting it to NULL.
+  __asm__ __volatile__("shrxq %2, %1, %0"
+                       :"=r"(jnk)
+                       :"r"(cl), "r"(null)
+                       :);
+#endif
 
   // We return prepackaged chains of the correct size to the central cache.
   // TODO: Use the same format internally in the thread caches?
