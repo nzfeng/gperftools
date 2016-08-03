@@ -410,15 +410,16 @@ inline void ThreadCache::Deallocate(void* ptr, size_t cl) {
   // the entire freelist. But this might be enough to find some bugs.
   ASSERT(ptr != list->Next());
 
-  list->Push(ptr);
-#if 0
-  // Update the cache by pushing this head onto the cache.
+#ifdef TCMALLOC_LIST_PUSH_MAGIC
+  // Update the cache by pushing this head onto the cache. No need for fancy
+  // fallbacks though - if the push fails, nothing will be broken.
   uint64_t jnk;
   __asm__ __volatile__("shrxq %2, %1, %0"
                        :"=&r"(jnk)
-                       :"r"(head), "r"(cl)
+                       :"r"(ptr), "r"(cl)
                        :);
 #endif
+  list->Push(ptr);
   ssize_t list_headroom =
       static_cast<ssize_t>(list->max_length()) - list->length();
 
