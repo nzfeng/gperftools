@@ -123,7 +123,7 @@ void* ThreadCache::FetchFromCentralCache(size_t cl, size_t byte_size) {
   // few instructions on the slow path doesn't make any difference.
   __asm__ __volatile__("shrxq %2, %1, %0"
                        :"=r"(jnk)
-                       :"r"(cl), "r"(null)
+                       :"r"(null), "r"(cl)
                        :);
 #endif
   FreeList* list = &list_[cl];
@@ -198,7 +198,7 @@ void ThreadCache::ReleaseToCentralCache(FreeList* src, size_t cl, int N) {
   // Invalidate the cache entry for cl by setting it to NULL.
   __asm__ __volatile__("shrxq %2, %1, %0"
                        :"=r"(jnk)
-                       :"r"(cl), "r"(null)
+                       :"r"(null), "r"(cl)
                        :);
 #endif
 
