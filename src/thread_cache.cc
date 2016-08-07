@@ -100,7 +100,14 @@ void ThreadCache::Init(pthread_t tid) {
   }
 
   uint32_t sampler_seed;
+#ifdef REALLY_RANDOM_SEED
   memcpy(&sampler_seed, &tid, sizeof(sampler_seed));
+#else
+  // Fix sampler for our simulations. We still let it vary a bit per thread,
+  // so we don't get lockstep sampling. But as long as threads are created
+  // in the same order, that's fine.
+  sampler_seed = 7537 + (tid & 16);
+#endif
   sampler_.Init(sampler_seed);
 }
 
