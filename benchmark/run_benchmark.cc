@@ -44,12 +44,12 @@ struct internal_bench {
   init_body init_fn;
 };
 
-static void run_body(struct internal_bench *b, long iterations)
+static void run_body(struct internal_bench *b, long rep, long iterations)
 {
-  b->body(iterations, b->param);
+  b->body(rep, iterations, b->param);
 }
 
-static double measure_once(struct internal_bench *b, long iterations)
+static double measure_once(struct internal_bench *b, long rep, long iterations)
 {
   struct timeval tv_before, tv_after;
   int rv;
@@ -61,7 +61,7 @@ static double measure_once(struct internal_bench *b, long iterations)
     abort();
   }
 
-  run_body(b, iterations);
+  run_body(b, rep, iterations);
 
   rv = gettimeofday(&tv_after, NULL);
   if (rv) {
@@ -75,26 +75,25 @@ static double measure_once(struct internal_bench *b, long iterations)
   return time;
 }
 
-static double run_benchmark(struct internal_bench *b)
+static double run_benchmark(struct internal_bench *b, long rep)
 {
   double nsec;
-  nsec = measure_once(b, ITERATIONS);
+  nsec = measure_once(b, rep, ITERATIONS);
   return nsec / ITERATIONS;
 }
 
 void report_benchmark(const char *name, bench_body body, init_body init_fn, uintptr_t param)
 {
-  int i;
   struct internal_bench b = {.body = body, .param = param, .init_fn = init_fn};
-  for (i = 0; i < 13; i++) {
+  for (size_t i = 0; i < REPEATS; i++)
+    if(b.init_fn)
+      b.init_fn(i);
 
+  for (size_t i = 0; i < REPEATS; i++) {
     if (i == 1)
       xiosim_roi_begin();
 
-    if (b.init_fn)
-      b.init_fn();
-
-    double nsec = run_benchmark(&b);
+    double nsec = run_benchmark(&b, i);
     int slen;
     int padding_size;
 

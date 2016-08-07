@@ -6,12 +6,12 @@
 
 #include "run_benchmark.h"
 
-size_t sizes[ITERATIONS];
-bool free_outcomes[ITERATIONS];
-void* blocks[ITERATIONS];
-size_t free_ind[ITERATIONS];
+size_t sizes[REPEATS][ITERATIONS];
+bool free_outcomes[REPEATS][ITERATIONS];
+void* blocks[REPEATS][ITERATIONS];
+size_t free_ind[REPEATS][ITERATIONS];
 
-static void init_sizes() {
+static void init_sizes(long rep) {
     std::random_device rd;
     std::default_random_engine re(rd());
 
@@ -20,31 +20,31 @@ static void init_sizes() {
     std::piecewise_constant_distribution<> dist(intervals.begin(), intervals.end(), weights.begin());
 
     for (size_t i = 0; i < ITERATIONS; i++) {
-        sizes[i] = dist(re);
+        sizes[rep][i] = dist(re);
     }
 
     std::default_random_engine re2(rd());
     std::uniform_int_distribution<size_t> d(0, ITERATIONS);
-    free_ind[0] = 0;
+    free_ind[rep][0] = 0;
     for (size_t i = 1; i < ITERATIONS; i++) {
-        free_ind[i] = static_cast<size_t>(d(re2)) % i;
+        free_ind[rep][i] = static_cast<size_t>(d(re2)) % i;
     }
 }
 
-static void bench_fastpath_gauss(long iterations, uintptr_t param)
+static void bench_fastpath_gauss(long rep, long iterations, uintptr_t param)
 {
   for (long i = 1; i < iterations; i++) {
-    void *p = malloc(sizes[i]);
+    void *p = malloc(sizes[rep][i]);
     if (!p) {
       abort();
     }
-    blocks[i] = p;
+    blocks[rep][i] = p;
 
-    size_t to_free = free_ind[i];
+    size_t to_free = free_ind[rep][i];
     assert(to_free < i);
-    if (blocks[to_free] != nullptr) {
-        free(blocks[to_free]);
-        blocks[to_free] = nullptr;
+    if (blocks[rep][to_free] != nullptr) {
+        free(blocks[rep][to_free]);
+        blocks[rep][to_free] = nullptr;
     }
   }
 }

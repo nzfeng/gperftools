@@ -5,7 +5,8 @@
 
 // Only use five different size classes to represent the best case for the size
 // class cache.
-static void bench_fastpath_throughput(long iterations,
+static void bench_fastpath_throughput(long rep,
+                                      long iterations,
                                       uintptr_t param)
 {
   size_t sz = 8;

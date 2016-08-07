@@ -3,7 +3,8 @@
 
 #include "run_benchmark.h"
 
-static void bench_fastpath_dependent(long iterations,
+static void bench_fastpath_dependent(long rep,
+                                     long iterations,
                                      uintptr_t param)
 {
   size_t sz = 32;

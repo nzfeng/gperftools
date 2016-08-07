@@ -31,7 +31,8 @@
 
 #include "run_benchmark.h"
 
-static void bench_fastpath_throughput(long iterations,
+static void bench_fastpath_throughput(long rep,
+                                      long iterations,
                                       uintptr_t param)
 {
   size_t sz = 32;
@@ -47,7 +48,8 @@ static void bench_fastpath_throughput(long iterations,
   }
 }
 
-static void bench_fastpath_dependent(long iterations,
+static void bench_fastpath_dependent(long rep,
+                                     long iterations,
                                      uintptr_t param)
 {
   size_t sz = 32;
@@ -63,7 +65,8 @@ static void bench_fastpath_dependent(long iterations,
   }
 }
 
-static void bench_fastpath_simple(long iterations,
+static void bench_fastpath_simple(long rep,
+                                  long iterations,
                                   uintptr_t param)
 {
   size_t sz = 64;
@@ -82,7 +85,8 @@ static void bench_fastpath_simple(long iterations,
 
 #define STACKSZ (1 << 16)
 
-static void bench_fastpath_stack(long iterations,
+static void bench_fastpath_stack(long rep,
+                                 long iterations,
                                  uintptr_t _param)
 {
 
@@ -107,7 +111,8 @@ static void bench_fastpath_stack(long iterations,
   }
 }
 
-static void bench_fastpath_stack_simple(long iterations,
+static void bench_fastpath_stack_simple(long rep,
+                                        long iterations,
                                         uintptr_t _param)
 {
 
@@ -130,7 +135,8 @@ static void bench_fastpath_stack_simple(long iterations,
   }
 }
 
-static void bench_fastpath_rnd_dependent(long iterations,
+static void bench_fastpath_rnd_dependent(long rep,
+                                         long iterations,
                                          uintptr_t _param)
 {
   static const uintptr_t rnd_c = 1013904223;

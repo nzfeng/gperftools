@@ -11,8 +11,8 @@
 
 #include "run_benchmark.h"
 
-std::vector<void*> allocated(ITERATIONS, nullptr);
-std::vector<size_t> free_ind(ITERATIONS);
+std::vector<void*> allocated[REPEATS];
+std::vector<size_t> free_ind[REPEATS];
 
 static void set_affinity(int core_id) {
   pthread_t thread = pthread_self();
@@ -28,21 +28,24 @@ static void set_affinity(int core_id) {
   }
 }
 
-void init() {
+void init(long rep) {
+  allocated[rep].insert(allocated[rep].begin(), ITERATIONS, nullptr);
+  free_ind[rep].reserve(ITERATIONS);
+
   std::random_device rd;
   std::default_random_engine re(rd());
   for (size_t i = 0; i < ITERATIONS; i++) {
-    free_ind[i] = i;
+    free_ind[rep][i] = i;
   }
-  std::shuffle(std::begin(free_ind), std::end(free_ind), re);
+  std::shuffle(std::begin(free_ind[rep]), std::end(free_ind[rep]), re);
 }
 
-static void consumer() {
+static void consumer(long rep) {
   set_affinity(1);
   size_t freed = 0;
   size_t i = 0;
   while (freed < ITERATIONS) {
-    void*& curr = allocated[free_ind[i]];
+    void*& curr = allocated[rep][free_ind[rep][i]];
     if (curr) {
         freed++;
         free(curr);
@@ -52,16 +55,16 @@ static void consumer() {
   }
 }
 
-static void producer(long iterations, uintptr_t param) {
+static void producer(long rep, long iterations, uintptr_t param) {
   size_t sz = 32;
   set_affinity(0);
-  std::thread t(consumer);
+  std::thread t(consumer, rep);
   for (size_t i = 0; i < ITERATIONS; i++) {
     void *p = malloc(sz);
     if (!p) {
       abort();
     }
-    allocated[i] = p;
+    allocated[rep][i] = p;
     // this makes next iteration use different free list. So
     // subsequent iterations may actually overlap in time.
     sz = (sz & 511) + 16;

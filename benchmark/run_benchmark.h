@@ -38,9 +38,10 @@ extern "C" {
 #endif
 
 const size_t ITERATIONS = 32768 * NATIVE_FACTOR;
+const size_t REPEATS = 13;
 
-typedef void (*bench_body)(long iterations, uintptr_t param);
-typedef void (*init_body)();
+typedef void (*bench_body)(long rep, long iterations, uintptr_t param);
+typedef void (*init_body)(long rep);
 
 void report_benchmark(const char *name, bench_body body, init_body init_fn, uintptr_t param);
 

@@ -5,9 +5,9 @@
 
 #include "run_benchmark.h"
 
-size_t sizes[ITERATIONS];
+size_t sizes[REPEATS][ITERATIONS];
 
-static void init_sizes() {
+static void init_sizes(long rep) {
     std::random_device rd;
     std::default_random_engine re(rd());
 
@@ -16,14 +16,14 @@ static void init_sizes() {
     std::piecewise_constant_distribution<> dist(intervals.begin(), intervals.end(), weights.begin());
 
     for (size_t i = 0; i < ITERATIONS; i++) {
-        sizes[i] = dist(re);
+        sizes[rep][i] = dist(re);
     }
 }
 
-static void bench_fastpath_gauss(long iterations, uintptr_t param)
+static void bench_fastpath_gauss(long rep, long iterations, uintptr_t param)
 {
   for (; iterations>0; iterations--) {
-    void *p = malloc(sizes[iterations]);
+    void *p = malloc(sizes[rep][iterations]);
     if (!p) {
       abort();
     }
