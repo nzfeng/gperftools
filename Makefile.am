@@ -1146,7 +1146,8 @@ noinst_PROGRAMS += tp tp_native \
 	gauss gauss_native \
 	gauss_free gauss_free_native \
 	prod prod_native \
-	size_class_cache size_class_cache_native
+	size_class_cache size_class_cache_native \
+	antagonist
 
 NATIVE_FLAGS=-DNATIVE_FACTOR=64
 
@@ -1211,6 +1212,11 @@ size_class_cache_native_SOURCES = benchmark/size_class_cache.cc
 size_class_cache_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
 size_class_cache_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 size_class_cache_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+
+antagonist_SOURCES = benchmark/antagonist.cc
+antagonist_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+antagonist_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
+antagonist_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 endif !MINGW
 
 ### Documentation (above and beyond tcmalloc_minimal documentation)
