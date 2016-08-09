@@ -1154,62 +1154,62 @@ NATIVE_FLAGS=-DNATIVE_FACTOR=64
 # in a build *automation* system...
 tp_SOURCES = benchmark/tp.cc
 tp_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-tp_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+tp_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 tp_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 tp_native_SOURCES = benchmark/tp.cc
 tp_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-tp_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+tp_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 tp_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 tp_dep_SOURCES = benchmark/tp_dep.cc
 tp_dep_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-tp_dep_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+tp_dep_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 tp_dep_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 tp_dep_native_SOURCES = benchmark/tp_dep.cc
 tp_dep_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-tp_dep_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+tp_dep_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 tp_dep_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 gauss_SOURCES = benchmark/gauss.cc
 gauss_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-gauss_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+gauss_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 gauss_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 gauss_native_SOURCES = benchmark/gauss.cc
 gauss_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-gauss_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+gauss_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 gauss_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 gauss_free_SOURCES = benchmark/gauss_free.cc
 gauss_free_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-gauss_free_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+gauss_free_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 gauss_free_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 gauss_free_native_SOURCES = benchmark/gauss_free.cc
 gauss_free_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-gauss_free_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+gauss_free_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 gauss_free_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 prod_SOURCES = benchmark/prod.cc
 prod_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-prod_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+prod_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 prod_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 prod_native_SOURCES = benchmark/prod.cc
 prod_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-prod_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+prod_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 prod_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 size_class_cache_SOURCES = benchmark/size_class_cache.cc
 size_class_cache_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-size_class_cache_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+size_class_cache_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 size_class_cache_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 size_class_cache_native_SOURCES = benchmark/size_class_cache.cc
 size_class_cache_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-size_class_cache_native_LDFLAGS = $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -static -T $(top_srcdir)/src/tcmalloc.ld
+size_class_cache_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 size_class_cache_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 endif !MINGW
 
