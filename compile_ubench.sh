@@ -1,9 +1,9 @@
 #!/bin/bash
 
-MAGIC=size_class_samples
+MAGIC=all_magic
 OUTPUT_DIR=output_${MAGIC}
 
-UB="tp tp_dep gauss gauss_free prod size_class_cache"
+UB="tp tp_dep gauss gauss_free prod size_class_cache sized_deletes"
 mkdir -p ${OUTPUT_DIR}
 
 # rm -rf fdo_build*

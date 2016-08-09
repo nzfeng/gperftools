@@ -234,14 +234,6 @@ class SizeMap {
     return class_array_[ClassIndex(size)];
   }
 
-  inline bool MaybeSizeClass(size_t size, size_t *size_class) {
-    if (UNLIKELY(size > kMaxSize))
-      return false;
-    else
-      *size_class = SizeClass(size);
-    return true;
-  }
-
   // Baseline implementation of size class and size computation.
   // Get the byte-size for a specified class
   inline size_t ByteSizeForClass(size_t cl) {
@@ -289,6 +281,19 @@ class SizeMap {
 #else
     SizeClassFallback(size, cl);
 #endif
+  }
+
+  inline bool MaybeSizeClass(size_t size, size_t *size_class) {
+    if (UNLIKELY(size > kMaxSize)) {
+      return false;
+    } else {
+#ifdef TCMALLOC_SIZE_CLASS_MAGIC
+      MagicSizeClassOrFallback(&size, size_class);
+#else
+      *size_class = SizeClass(size);
+#endif
+    }
+    return true;
   }
 
   // Number of objects to move between a per-thread list and a central
