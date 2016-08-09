@@ -401,15 +401,6 @@ inline void* ThreadCache::Allocate(size_t size, size_t cl) {
 }
 
 inline void ThreadCache::Deallocate(void* ptr, size_t cl) {
-  FreeList* list = &list_[cl];
-  size_ += Static::sizemap()->ByteSizeForClass(cl);
-  ssize_t size_headroom = max_size_ - size_ - 1;
-
-  // This catches back-to-back frees of allocs in the same size
-  // class. A more comprehensive (and expensive) test would be to walk
-  // the entire freelist. But this might be enough to find some bugs.
-  ASSERT(ptr != list->Next());
-
 #ifdef TCMALLOC_LIST_PUSH_MAGIC
   // Update the cache by pushing this head onto the cache. No need for fancy
   // fallbacks though - if the push fails, nothing will be broken.
@@ -419,6 +410,16 @@ inline void ThreadCache::Deallocate(void* ptr, size_t cl) {
                        :"r"(ptr), "r"(cl)
                        :);
 #endif
+
+  FreeList* list = &list_[cl];
+  size_ += Static::sizemap()->ByteSizeForClass(cl);
+  ssize_t size_headroom = max_size_ - size_ - 1;
+
+  // This catches back-to-back frees of allocs in the same size
+  // class. A more comprehensive (and expensive) test would be to walk
+  // the entire freelist. But this might be enough to find some bugs.
+  ASSERT(ptr != list->Next());
+
   list->Push(ptr);
   ssize_t list_headroom =
       static_cast<ssize_t>(list->max_length()) - list->length();
