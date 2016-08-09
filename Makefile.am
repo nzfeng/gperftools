@@ -1146,8 +1146,8 @@ noinst_PROGRAMS += tp tp_native \
 	gauss gauss_native \
 	gauss_free gauss_free_native \
 	prod prod_native \
-	size_class_cache size_class_cache_native \
 	antagonist \
+	tp_small tp_small_native \
 	sized_deletes sized_deletes_native
 
 NATIVE_FLAGS=-DNATIVE_FACTOR=64
@@ -1204,15 +1204,15 @@ prod_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $
 prod_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
 prod_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
-size_class_cache_SOURCES = benchmark/size_class_cache.cc
-size_class_cache_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
-size_class_cache_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
-size_class_cache_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+tp_small_SOURCES = benchmark/tp_small.cc
+tp_small_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
+tp_small_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
+tp_small_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
-size_class_cache_native_SOURCES = benchmark/size_class_cache.cc
-size_class_cache_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
-size_class_cache_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
-size_class_cache_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
+tp_small_native_SOURCES = benchmark/tp_small.cc
+tp_small_native_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS) $(NATIVE_FLAGS)
+tp_small_native_LDFLAGS = -all-static -static-libstdc++ -static-libgcc $(PTHREAD_CFLAGS) $(TCMALLOC_FLAGS) -T $(top_srcdir)/src/tcmalloc.ld
+tp_small_native_LDADD = librun_benchmark.la libtcmalloc.la $(PTHREAD_LIBS)
 
 antagonist_SOURCES = benchmark/antagonist.cc
 antagonist_CXXFLAGS = $(PTHREAD_CFLAGS) $(AM_CXXFLAGS) $(NO_BUILTIN_CXXFLAGS)
