@@ -3,7 +3,7 @@
 MAGIC=all_magic
 OUTPUT_DIR=output_${MAGIC}
 
-UB="tp tp_dep gauss gauss_free prod size_class_cache sized_deletes"
+UB="tp tp_dep gauss gauss_free prod tp_small sized_deletes"
 mkdir -p ${OUTPUT_DIR}
 
 # rm -rf fdo_build*
