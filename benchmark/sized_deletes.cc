@@ -7,35 +7,35 @@
 
 // Structs of increasing sizes to enable the compiler to invoke sized delete.
 struct size32 {
-  uint32_t elems[1];
+  uint32_t elems[8];
 };
 
 struct size64 {
-  uint32_t elems[2];
+  uint32_t elems[16];
 };
 
 struct size96 {
-  uint32_t elems[3];
+  uint32_t elems[24];
 };
 
 struct size128 {
-  uint32_t elems[4];
+  uint32_t elems[32];
 };
 
 struct size160 {
-  uint32_t elems[5];
+  uint32_t elems[40];
 };
 
 struct size192 {
-  uint32_t elems[6];
+  uint32_t elems[48];
 };
 
 struct size224 {
-  uint32_t elems[7];
+  uint32_t elems[56];
 };
 
 struct size256 {
-  uint32_t elems[8];
+  uint32_t elems[64];
 };
 
 static void bench_sized_deletes(long rep, long iterations, uintptr_t param)
