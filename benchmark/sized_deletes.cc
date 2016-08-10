@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "run_benchmark.h"
+#include "num_iterations.h"
 
 // Structs of increasing sizes to enable the compiler to invoke sized delete.
 struct size32 {

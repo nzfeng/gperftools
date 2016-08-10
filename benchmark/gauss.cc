@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "run_benchmark.h"
+#include "num_iterations.h"
 
 size_t sizes[REPEATS][ITERATIONS];
 

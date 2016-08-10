@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "run_benchmark.h"
+#include "num_iterations.h"
 
 extern "C" void xiosim_trash_cache() __attribute__ ((noinline));
 void xiosim_trash_cache() { __asm__ __volatile__ ("":::"memory"); }
