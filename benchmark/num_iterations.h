@@ -11,7 +11,8 @@ extern "C" {
 #define NATIVE_FACTOR 1
 #endif
 
-const size_t ITERATIONS = 32768 * NATIVE_FACTOR;
+const size_t BASE_ITERATIONS = 32768;
+const size_t ITERATIONS = BASE_ITERATIONS * NATIVE_FACTOR;
 const size_t REPEATS = 13;
 
 #ifdef __cplusplus

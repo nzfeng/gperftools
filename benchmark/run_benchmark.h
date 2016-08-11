@@ -33,6 +33,7 @@
 extern "C" {
 #endif
 
+extern const size_t BASE_ITERATIONS;
 extern const size_t ITERATIONS;
 extern const size_t REPEATS;
 
