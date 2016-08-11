@@ -8,38 +8,47 @@
 
 // Structs of increasing sizes to enable the compiler to invoke sized delete.
 struct size4 {
+  size4() {}
   uint32_t elems[1];
 };
 
 struct size32 {
+  size32() {}
   uint32_t elems[8];
 };
 
 struct size64 {
+  size64() {}
   uint32_t elems[16];
 };
 
 struct size96 {
+  size96() {}
   uint32_t elems[24];
 };
 
 struct size128 {
+  size128() {}
   uint32_t elems[32];
 };
 
 struct size160 {
+  size160(){}
   uint32_t elems[40];
 };
 
 struct size192 {
+  size192() {}
   uint32_t elems[48];
 };
 
 struct size224 {
+  size224() {}
   uint32_t elems[56];
 };
 
 struct size256 {
+  size256() {}
   uint32_t elems[64];
 };
 
