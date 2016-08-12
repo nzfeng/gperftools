@@ -2,6 +2,7 @@
 #include <cstdint>
 
 #include "run_benchmark.h"
+#include "num_iterations.h"
 
 static void bench_fastpath_throughput(long rep,
                                       long iterations,

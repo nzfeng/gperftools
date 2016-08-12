@@ -10,6 +10,7 @@
 #include <pthread.h>
 
 #include "run_benchmark.h"
+#include "num_iterations.h"
 
 std::vector<void*> allocated[REPEATS];
 std::vector<size_t> free_ind[REPEATS];

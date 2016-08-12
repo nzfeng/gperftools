@@ -2,6 +2,7 @@
 #include <cstdint>
 
 #include "run_benchmark.h"
+#include "num_iterations.h"
 
 // Only use five different size classes to represent the best case for the size
 // class cache.
