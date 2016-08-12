@@ -35,8 +35,7 @@ static void init_sizes(long rep) {
     }
 }
 
-static void bench_fastpath_gauss(long rep, long iterations, uintptr_t param)
-{
+static void bench_fastpath_gauss(long rep, long iterations, uintptr_t param) {
   for (long i = 1; i < iterations; i++) {
     void *p = malloc(sizes[rep][i]);
     if (!p) {
@@ -51,6 +50,7 @@ static void bench_fastpath_gauss(long rep, long iterations, uintptr_t param)
         blocks[rep][to_free] = nullptr;
     }
     xiosim_trash_cache();
+  }
 }
 
 
