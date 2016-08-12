@@ -411,6 +411,13 @@ inline void* ThreadCache::Allocate(size_t size, size_t cl) {
     // Missed on either the head or next. Go to SW to clean things up.
     // On this branch, both the right and left slots are invalid.
     head = AllocateFallback(size, cl);
+
+    uint64_t jnk;
+    // We can still prefetch the new head next, which will make it to the left slot.
+    __asm__ __volatile__("shlxq %2, %1, %0"
+                         :"=&r"(jnk)
+                         :"m"(*reinterpret_cast<void**>(head)), "r"(cl)
+                         :);
   }
 
   return head;
