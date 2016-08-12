@@ -50,10 +50,7 @@ static void bench_fastpath_gauss(long rep, long iterations, uintptr_t param)
         free(blocks[rep][to_free]);
         blocks[rep][to_free] = nullptr;
     }
-    if (iterations % 8 == 0)
-        xiosim_trash_cache();
-
-  }
+    xiosim_trash_cache();
 }
 
 
