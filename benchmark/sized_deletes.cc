@@ -55,11 +55,6 @@ struct size256 {
 static void bench_sized_deletes(long rep, long iterations, uintptr_t param)
 {
   for (; iterations>0; iterations-=1) {
-    size4 *p4 = new size4();
-    if (!p4) abort();
-    delete p4;
-
-    /*
     size32 *p32 = new size32();
     if (!p32) abort();
     delete p32;
@@ -91,7 +86,6 @@ static void bench_sized_deletes(long rep, long iterations, uintptr_t param)
     size256 *p256 = new size256();
     if (!p256) abort();
     delete p256;
-    */
   }
 }
 
