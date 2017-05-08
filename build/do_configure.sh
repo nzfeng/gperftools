@@ -36,18 +36,22 @@ then
 fi
 
 MAGIC_FLAGS=""
+INSTALL_SUFFIX=""
 if [ "$MAGIC" == "all_magic" ]
 then
     MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic --enable-size-class-magic --enable-sample-magic"
+    INSTALL_SUFFIX="_all_magic"
 elif [ "$MAGIC" == "list_magic" ]
 then
     MAGIC_FLAGS="--enable-list-pop-magic --enable-list-push-magic"
+    INSTALL_SUFFIX="_list_magic"
 elif [ "$MAGIC" == "sample_magic" ]
 then
     MAGIC_FLAGS="--enable-sample-magic"
+    INSTALL_SUFFIX="_sample_magic"
 fi
 
-../configure --prefix="/home/${USER}/gperftools/install_${MAGIC}"
+../configure --prefix="/home/${USER}/gperftools/install${INSTALL_SUFFIX}"
              --disable-shared \
              --enable-sized-delete \
              --enable-fdo=${FDO} \
