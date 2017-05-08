@@ -51,7 +51,7 @@ then
     INSTALL_SUFFIX="_sample_magic"
 fi
 
-../configure --prefix="/home/${USER}/gperftools/install${INSTALL_SUFFIX}"
+../configure --prefix="/home/${USER}/gperftools/install${INSTALL_SUFFIX}" \
              --disable-shared \
              --enable-sized-delete \
              --enable-fdo=${FDO} \
