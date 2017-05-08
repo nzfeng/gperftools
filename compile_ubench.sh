@@ -1,9 +1,9 @@
 #!/bin/bash
 
-MAGIC=all_magic
+MAGIC=no
 OUTPUT_DIR=output_${MAGIC}
 
-UB="tp tp_dep gauss gauss_free prod tp_small sized_deletes"
+UB="tp tp_dep gauss gauss_free prod tp_small sized_deletes antagonist"
 mkdir -p ${OUTPUT_DIR}
 
 # rm -rf fdo_build*
@@ -23,7 +23,8 @@ done
 
 cd ..
 
-# Don't do FDO builds.
+# Don't do FDO builds - reusing profiles for new magic instructions is
+# nontrivial.
 exit 0
 
 # For FDO.
