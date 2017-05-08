@@ -57,3 +57,21 @@ starting with `google_malloc` with the correct path.
 Although this is not strictly required for the native build of tcmalloc, we
 recommend you do this for the native build as well, because later build scripts
 expect this file to be there.
+
+## Building the microbenchmarks ##
+
+Go to the build directory and run the `compile_ubench.sh` script. By default,
+the script builds the baseline version without Mallacc instructions. You can
+change these settings by editing the compile script directly.  The benchmarks
+are placed under `build/`. The microbenchmarks are:
+
+  * `tp`
+  * `tp_small`
+  * `tp_dep`
+  * `gauss`
+  * `gauss_free`
+  * `sized_deletes`
+  * `prod`
+  * `antagonist` (this only runs under XIOSim).
+
+Microbenchmark source code is under `gperftools/benchmark`.
