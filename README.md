@@ -76,10 +76,8 @@ expect this file to be there.
 
 ## Building the microbenchmarks ##
 
-Go to the build directory and run the `compile_ubench.sh` script. By default,
-the script builds the baseline version without Mallacc instructions. You can
-change these settings by editing the compile script directly.  The benchmarks
-are placed under `build/`. The microbenchmarks are:
+The microbenchmarks will be built along with the library itself.  They are
+placed under `build/`. The microbenchmarks are:
 
   * tp
   * tp_small
