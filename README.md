@@ -8,6 +8,17 @@ of gperftools; the original README is available at [README_orig.txt](README_orig
 
 # Installation #
 
+## Buildling dependencies
+
+Check [INSTALL](INSTALL) -- you will need to download a specific version of
+[libunwind](http://download.savannah.gnu.org/releases/libunwind/libunwind-0.99-beta.tar.gz)
+and build it like so (assuming at /home/user/libunwind):
+```bash
+CFLAGS=-D_FORTIFY_SOURCE=1 ./configure --prefix=/home/user/libunwind/install
+make
+make install
+```
+
 ## Building the library ##
 
 We have a `do_configure.sh` script containing our build options under the build
