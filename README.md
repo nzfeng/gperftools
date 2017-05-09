@@ -85,7 +85,6 @@ placed under `build/`. The microbenchmarks are:
   * gauss
   * gauss_free
   * sized_deletes
-  * prod
   * antagonist (this only runs under XIOSim).
 
 Microbenchmark source code is under `gperftools/benchmark`.
