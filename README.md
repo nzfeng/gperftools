@@ -8,7 +8,7 @@ of gperftools; the original README is available at [README_orig.txt](README_orig
 
 # Installation #
 
-## Buildling dependencies
+## Building dependencies
 
 Check [INSTALL](INSTALL) -- you will need to download a specific version of
 [libunwind](http://download.savannah.gnu.org/releases/libunwind/libunwind-0.99-beta.tar.gz)
@@ -19,11 +19,11 @@ make
 make install
 ```
 
+You'll also need to install libtool.
+
 ## Building the library ##
 
-First, please read [INSTALL](./INSTALL) to ensure all the dependencies have
-been met.  In short, you will need to install libtool and libunwind. Then, run
-`./autogen.sh` to generate the `configure` script before moving on.
+Run `./autogen.sh` to generate the `configure` script before moving on.
 
 We have a `do_configure.sh` script containing our build options under the build
 directory. This script controls where libtcmalloc is installed to, whether any
