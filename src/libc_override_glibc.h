@@ -87,6 +87,16 @@ extern "C" {
 }   // extern "C"
 #undef ALIAS
 
+// A bug in glibc causes these symbols to be brought in, triggering symbol
+// conflicts on all the other overridden symbols. This was fixed in glibc 2.25
+// but that has not been widely deployed.
+// https://sourceware.org/bugzilla/show_bug.cgi?id=20432
+extern "C" {
+void __malloc_fork_lock_parent(void){};
+void __malloc_fork_unlock_parent(void){};
+void __malloc_fork_unlock_child(void){};
+}
+
 #endif  // #if defined(__GNUC__) && !defined(__MACH__)
 
 
