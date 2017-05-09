@@ -21,6 +21,10 @@ make install
 
 ## Building the library ##
 
+First, please read [INSTALL](./INSTALL) to ensure all the dependencies have
+been met.  In short, you will need to install libtool and libunwind. Then, run
+`./autogen.sh` to generate the `configure` script before moving on.
+
 We have a `do_configure.sh` script containing our build options under the build
 directory. This script controls where libtcmalloc is installed to, whether any
 of the special Mallacc instructions are used (a compile-time decision), and
