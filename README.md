@@ -50,9 +50,10 @@ a custom linker script that ensures that various attributes of the
 section with a particular name and set of attributes when replacing placeholder
 instructions. This linker script is located at [spec_linker.ld](spec_linker.ld).
 
-Copy the linker script to your gperftools installation directory. Then, open up
-the linker script and replace the path to the linker script in the line
-starting with `google_malloc` with the correct path.
+Copy the linker script to your gperftools installation directory (e.g.
+/home/user/gperftools/install/spec_linker.ld). Then, open up the linker
+script and replace the path to the linker script in the line starting with
+`google_malloc` with the correct path.
 
 Although this is not strictly required for the native build of tcmalloc, we
 recommend you do this for the native build as well, because later build scripts
@@ -65,13 +66,13 @@ the script builds the baseline version without Mallacc instructions. You can
 change these settings by editing the compile script directly.  The benchmarks
 are placed under `build/`. The microbenchmarks are:
 
-  * `tp`
-  * `tp_small`
-  * `tp_dep`
-  * `gauss`
-  * `gauss_free`
-  * `sized_deletes`
-  * `prod`
-  * `antagonist` (this only runs under XIOSim).
+  * tp
+  * tp_small
+  * tp_dep
+  * gauss
+  * gauss_free
+  * sized_deletes
+  * prod
+  * antagonist (this only runs under XIOSim).
 
 Microbenchmark source code is under `gperftools/benchmark`.
