@@ -51,16 +51,16 @@ then
     INSTALL_SUFFIX="_sample_magic"
 fi
 
-TOOLCHAIN_HOME=/group/vlsiarch/skanev/toolchain_6_1/bin
-LIBUNWIND_HOME=/home/skanev/libunwind/install
+TOOLCHAIN_HOME=/usr
+LIBUNWIND_HOME=/usr/local
 
 ../configure --prefix="/home/${USER}/gperftools/install${INSTALL_SUFFIX}" \
              --disable-shared \
              --enable-sized-delete \
              --enable-fdo=${FDO} \
              ${MAGIC_FLAGS} \
-             CC=${TOOLCHAIN_HOME}/gcc \
-             CXX=${TOOLCHAIN_HOME}/g++ \
+             CC=${TOOLCHAIN_HOME}/bin/gcc \
+             CXX=${TOOLCHAIN_HOME}/bin/g++ \
              CFLAGS="-I${LIBUNWIND_HOME} -g -O3" \
              CXXFLAGS="-I${LIBUNWIND_HOME}/include -g -std=c++1y -O3 -fabi-version=2 -D_GLIBCXX_USE_CXX11_ABI=0" \
              CPPFLAGS=-I${LIBUNWIND_HOME}/include \
