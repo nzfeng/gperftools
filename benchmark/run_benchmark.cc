@@ -32,11 +32,11 @@
 #include <string.h>
 #include <sys/time.h>
 
-extern "C" void xiosim_roi_begin() __attribute__ ((noinline));
-extern "C" void xiosim_roi_end() __attribute__ ((noinline));
+extern "C" void xiosim_roi_begin() __attribute__((noinline));
+extern "C" void xiosim_roi_end() __attribute__((noinline));
 
-void xiosim_roi_begin() { __asm__ __volatile__ ("":::"memory"); }
-void xiosim_roi_end() { __asm__ __volatile__ ("":::"memory"); }
+void xiosim_roi_begin() { __asm__ __volatile__("" ::: "memory"); }
+void xiosim_roi_end() { __asm__ __volatile__("" ::: "memory"); }
 
 struct internal_bench {
   bench_body body;
@@ -44,13 +44,12 @@ struct internal_bench {
   init_body init_fn;
 };
 
-static void run_body(struct internal_bench *b, long rep, long iterations)
-{
+static void run_body(struct internal_bench *b, long rep, long iterations) {
   b->body(rep, iterations, b->param);
 }
 
-static double measure_once(struct internal_bench *b, long rep, long iterations)
-{
+static double measure_once(struct internal_bench *b, long rep,
+                           long iterations) {
   struct timeval tv_before, tv_after;
   int rv;
   double time;
@@ -75,18 +74,17 @@ static double measure_once(struct internal_bench *b, long rep, long iterations)
   return time;
 }
 
-static double run_benchmark(struct internal_bench *b, long rep)
-{
+static double run_benchmark(struct internal_bench *b, long rep) {
   double nsec;
   nsec = measure_once(b, rep, ITERATIONS);
   return nsec / ITERATIONS;
 }
 
-void report_benchmark(const char *name, bench_body body, init_body init_fn, uintptr_t param)
-{
+void report_benchmark(const char *name, bench_body body, init_body init_fn,
+                      uintptr_t param) {
   struct internal_bench b = {.body = body, .param = param, .init_fn = init_fn};
   for (size_t i = 0; i < REPEATS; i++)
-    if(b.init_fn)
+    if (b.init_fn)
       b.init_fn(i);
 
   for (size_t i = 0; i < REPEATS; i++) {
@@ -98,7 +96,7 @@ void report_benchmark(const char *name, bench_body body, init_body init_fn, uint
     int padding_size;
 
     slen = printf("Benchmark: %s", name);
-    if (param && name[strlen(name)-1] != ')') {
+    if (param && name[strlen(name) - 1] != ')') {
       slen += printf("(%lld)", (long long)param);
     }
     padding_size = 60 - slen;
